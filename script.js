@@ -1,50 +1,62 @@
-const questions = [
-  {
-    question: "Which is larget animal in the world?",
-    answers: [
-      { text: "Shark", correct: false },
-      { text: "Blue whale", correct: true },
-      { text: "Elephant", correct: false },
-      { text: "Giraffe", correct: false },
-    ],
-  },
-  {
-    question: "Which is the smallest country in the world?",
-    answers: [
-      { text: "Vatican City", correct: true },
-      { text: "Bhutan", correct: false },
-      { text: "Nepal", correct: false },
-      { text: "Bangladesh", correct: false },
-    ],
-  },
-  {
-    question: "Which is larget desert in the world?",
-    answers: [
-      { text: "kalahari", correct: false },
-      { text: "Gobi", correct: false },
-      { text: "Sahara", correct: false },
-      { text: "Antarctica", correct: true },
-    ],
-  },
-  {
-    question: "Which is smallest Continent in the world?",
-    answers: [
-      { text: "Asia", correct: false },
-      { text: "Australia", correct: true },
-      { text: "Arctic", correct: false },
-      { text: "Africa", correct: false },
-    ],
-  },
-];
+// const questions = [
+//   {
+//     question: "Which is larget animal in the world?",
+//     answers: [
+//       { text: "Shark", correct: false },
+//       { text: "Blue whale", correct: true },
+//       { text: "Elephant", correct: false },
+//       { text: "Giraffe", correct: false },
+//     ],
+//   },
+//   {
+//     question: "Which is the smallest country in the world?",
+//     answers: [
+//       { text: "Vatican City", correct: true },
+//       { text: "Bhutan", correct: false },
+//       { text: "Nepal", correct: false },
+//       { text: "Bangladesh", correct: false },
+//     ],
+//   },
+//   {
+//     question: "Which is larget desert in the world?",
+//     answers: [
+//       { text: "kalahari", correct: false },
+//       { text: "Gobi", correct: false },
+//       { text: "Sahara", correct: false },
+//       { text: "Antarctica", correct: true },
+//     ],
+//   },
+//   {
+//     question: "Which is smallest Continent in the world?",
+//     answers: [
+//       { text: "Asia", correct: false },
+//       { text: "Australia", correct: true },
+//       { text: "Arctic", correct: false },
+//       { text: "Africa", correct: false },
+//     ],
+//   },
+// ];
 
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
+const importButton = document.getElementById("import-btn");
+const importDiv = document.getElementById("import-section");
+const quizDiv = document.getElementById("quiz-section");
+
+function getNextButton() {
+  nextButton.style.display = "none";
+  while (answerButtons.firstChild) {
+    answerButtons.removeChild(answerButtons.firstChild);
+  }
+}
 
 let currentQuestionIndex = 0;
 let score = 0;
+let questions = [];
 
 const startQuiz = () => {
+  showQuizSection();
   currentQuestionIndex = 0;
   score = 0;
   nextButton.innerHTML = "Next";
@@ -118,4 +130,47 @@ nextButton.addEventListener("click", () => {
   }
 });
 
-startQuiz();
+importButton.addEventListener("click", () => {
+  importQuizFromJson();
+});
+
+function importQuizFromJson() {
+  var input = document.createElement('input');
+  input.type = 'file';
+  input.accept = ".json";
+
+  input.onchange = e => {
+    let file = e.target.files[0];
+
+    let reader = new FileReader();
+    reader.readAsText(file, 'UTF-8');
+
+    reader.onload = readerEvent => {
+      try {
+        let content = readerEvent.target.result;
+
+        const jsonData = JSON.parse(content);
+        questions = jsonData["questions"];
+        startQuiz();
+
+      } catch (error) {
+        alert('Error parsing JSON file.');
+      }
+    }
+  }
+
+  input.click();
+}
+
+function showImportSection() {
+  quizDiv.style.display = "none";
+  importDiv.style.display = "block";
+}
+
+function showQuizSection() {
+  quizDiv.style.display = "block";
+  importDiv.style.display = "none";
+}
+
+
+showImportSection();
