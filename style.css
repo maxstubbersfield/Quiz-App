@@ -71,6 +71,15 @@ body {
   cursor: pointer;
 }
 
+.explanation-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  font-family: 500;
+  background: #cce0ff;
+  border-radius: 4px;
+}
+
 .correct {
   background: #9aeabc;
 }

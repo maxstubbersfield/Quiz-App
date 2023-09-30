@@ -7,6 +7,7 @@
 //       { text: "Elephant", correct: false },
 //       { text: "Giraffe", correct: false },
 //     ],
+//     explanation: "This is because the blue whale is absolutely massive!",
 //   },
 //   {
 //     question: "Which is the smallest country in the world?",
@@ -40,6 +41,9 @@
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
+const explanationDiv = document.getElementById("explanation");
+const explanationText = document.getElementById("explanation-text");
+
 const importButton = document.getElementById("import-btn");
 const importDiv = document.getElementById("import-section");
 const quizDiv = document.getElementById("quiz-section");
@@ -77,12 +81,19 @@ const showQuestion = () => {
     if (answer.correct) {
       button.dataset.correct = answer.correct;
     }
+
+    if ("explanation" in currentQuestion) {
+      const text = currentQuestion.explanation;
+      button.dataset.explanation = text;
+    }
+
     button.addEventListener("click", selectAnswer);
   });
 };
 
 function resetState() {
   nextButton.style.display = "none";
+  explanationDiv.style.display = "none";
   while (answerButtons.firstChild) {
     answerButtons.removeChild(answerButtons.firstChild);
   }
@@ -103,6 +114,13 @@ function selectAnswer(e) {
     }
     button.disabled = true;
   });
+
+  if ("explanation" in selectedBtn.dataset) {
+    const text = selectedBtn.dataset.explanation;
+    explanationText.innerHTML = text;
+    explanationDiv.style.display = "block";
+  }
+
   nextButton.style.display = "block";
 }
 
