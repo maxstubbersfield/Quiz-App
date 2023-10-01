@@ -1,43 +1,3 @@
-// const questions = [
-//   {
-//     question: "Which is larget animal in the world?",
-//     answers: [
-//       { text: "Shark", correct: false },
-//       { text: "Blue whale", correct: true },
-//       { text: "Elephant", correct: false },
-//       { text: "Giraffe", correct: false },
-//     ],
-//     explanation: "This is because the blue whale is absolutely massive!",
-//   },
-//   {
-//     question: "Which is the smallest country in the world?",
-//     answers: [
-//       { text: "Vatican City", correct: true },
-//       { text: "Bhutan", correct: false },
-//       { text: "Nepal", correct: false },
-//       { text: "Bangladesh", correct: false },
-//     ],
-//   },
-//   {
-//     question: "Which is larget desert in the world?",
-//     answers: [
-//       { text: "kalahari", correct: false },
-//       { text: "Gobi", correct: false },
-//       { text: "Sahara", correct: false },
-//       { text: "Antarctica", correct: true },
-//     ],
-//   },
-//   {
-//     question: "Which is smallest Continent in the world?",
-//     answers: [
-//       { text: "Asia", correct: false },
-//       { text: "Australia", correct: true },
-//       { text: "Arctic", correct: false },
-//       { text: "Africa", correct: false },
-//     ],
-//   },
-// ];
-
 const questionElement = document.getElementById("question");
 const answerButtons = document.getElementById("answer-buttons");
 const nextButton = document.getElementById("next-btn");
@@ -58,6 +18,7 @@ function getNextButton() {
 let currentQuestionIndex = 0;
 let score = 0;
 let questions = [];
+let numberQuestions = true;
 
 const startQuiz = () => {
   showQuizSection();
@@ -71,7 +32,8 @@ const showQuestion = () => {
   resetState();
   let currentQuestion = questions[currentQuestionIndex];
   let questionNo = currentQuestionIndex + 1;
-  questionElement.innerHTML = questionNo + ". " + currentQuestion.question;
+
+  questionElement.innerHTML = numberQuestions ? questionNo + ". " + currentQuestion.question : currentQuestion.question;
 
   currentQuestion.answers.forEach((answer) => {
     const button = document.createElement("button");
@@ -168,7 +130,8 @@ function importQuizFromJson() {
         let content = readerEvent.target.result;
 
         const jsonData = JSON.parse(content);
-        questions = jsonData["questions"];
+        questions = jsonData.questions;
+        numberQuestions = jsonData.settings?.number_questions ?? true;
         startQuiz();
 
       } catch (error) {
